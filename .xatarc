@@ -1,0 +1,6 @@
+{
+  "databaseURL": "https://ADITYA-JAISWAL-s-workspace-q785in.ap-southeast-2.xata.sh/db/db-loom-video",
+  "codegen": {
+    "output": "src/xata.ts"
+  }
+}
