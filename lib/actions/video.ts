@@ -8,7 +8,7 @@ import { and, desc, eq, ilike, or, sql } from "drizzle-orm";
 import { auth } from "@/lib/auth";
 import {apiFetch, doesTitleMatch, getEnv, withErrorHandling} from "@/lib/utils";
 import { BUNNY } from "@/constants";
-//import aj, { fixedWindow, request } from "../arcjet";
+import aj, { fixedWindow, request } from "../arcjet";
 
 
 // Constants with full names
@@ -31,6 +31,22 @@ const getSessionUserId = async (): Promise<string> => {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) throw new Error("Unauthenticated");
   return session.user.id;
+};
+
+const validateWithArcjet = async (fingerPrint: string) => {
+  const rateLimit = aj.withRule(
+    fixedWindow({
+      mode: "LIVE",
+      window: "1m",
+      max: 2,
+      characteristics: ["fingerprint"],
+    })
+  );
+  const req = await request();
+  const decision = await rateLimit.protect(req, { fingerprint: fingerPrint });
+  if (decision.isDenied()) {
+    throw new Error("Rate Limit Exceeded");
+  }
 };
 
 // Server Actions
@@ -71,6 +87,7 @@ export const getThumbnailUploadUrl = withErrorHandling(
 export const saveVideoDetails = withErrorHandling(
   async (videoDetails: VideoDetails) => {
     const userId = await getSessionUserId();
+    await validateWithArcjet(userId);
     // await validateWithArcjet(userId);
     await apiFetch(
       `${VIDEO_STREAM_BASE_URL}/${BUNNY_LIBRARY_ID}/videos/${videoDetails.videoId}`,
