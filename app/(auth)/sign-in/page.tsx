@@ -62,25 +62,21 @@ const SignIn = () => {
                     </p>
                    <button
                         onClick={async () => {
-                            setloading(true); // Start loader
                             try {
-                            await authClient.signIn.social({ provider: "google" });
-                            // No setloading(false) needed — will redirect
-                            } catch (error) {
-                            console.error("Google Sign-In failed:", error);
-                            setloading(false); // Only if login fails
+                            setloading(true); // start loader
+                            await authClient.signIn.social({
+                                provider: "google",
+                            });
+                            } catch (err) {
+                            console.error("Google sign-in failed", err);
+                            setloading(false); // stop loader
                             }
                         }}
                         >
-                        {loading ? (
-                            <Loader/> // Show spinner
-                        ) : (
-                            <>
-                            <Image src="/assets/icons/google.svg" alt="google" width={22} height={22} />
-                            <span>Sign in with Google</span>
-                            </>
-                        )}
+                        <Image src="/assets/icons/google.svg" alt="google" width={22} height={22} />
+                        <span>Sign in with Google</span>
                         </button>
+
 
                 </section>
 
