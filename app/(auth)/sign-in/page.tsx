@@ -1,11 +1,12 @@
 'use client';
-
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { authClient } from "@/lib/auth-client";
+import Loader from "@/component/Loader";
 
 const SignIn = () => {
-
+   const [loading, setloading] = useState(false);
     
 
     return (
@@ -60,16 +61,27 @@ const SignIn = () => {
                         </span> in no time!
                     </p>
                    <button
-                    onClick={async () => {
-                    return await authClient.signIn.social({
-                        provider: "google",
-                    });
-                    }}
-                     >
-                        <Image src="/assets/icons/google.svg" alt="google"
-                        width = {22} height={22} />
-                        <span> Sign in with Google </span>
-                    </button>
+                        onClick={async () => {
+                            setloading(true); // Start loader
+                            try {
+                            await authClient.signIn.social({ provider: "google" });
+                            // No setloading(false) needed — will redirect
+                            } catch (error) {
+                            console.error("Google Sign-In failed:", error);
+                            setloading(false); // Only if login fails
+                            }
+                        }}
+                        >
+                        {loading ? (
+                            <Loader/> // Show spinner
+                        ) : (
+                            <>
+                            <Image src="/assets/icons/google.svg" alt="google" width={22} height={22} />
+                            <span>Sign in with Google</span>
+                            </>
+                        )}
+                        </button>
+
                 </section>
 
             </aside>
