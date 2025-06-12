@@ -18,12 +18,6 @@ const emailValidation = aj.withRule(
   })
 );
 
-const shieldValidation = aj.withRule(
-  shield({
-    mode: "LIVE",
-  })
-);
-
 //Rate Limiting 
 const rateLimit = aj.withRule(
   slidingWindow({
@@ -52,12 +46,11 @@ const protectedAuth = async (req: NextRequest): Promise<ArcjetDecision> => {
       }); 
     }
   }
-  if (!req.nextUrl.pathname.startsWith("/api/auth/sign-out")) {
+  
     return rateLimit.protect(req, {
       fingerprint: userId,
     });
-  }
-  return shieldValidation.protect(req);
+  
 };
 
 

@@ -6,9 +6,7 @@ import { authClient } from "@/lib/auth-client";
 
 const SignIn = () => {
 
-    const handleSignIn = async () => {
-       return await authClient.signIn.social({ provider : 'google'})
-    }
+    
 
     return (
         <main className="sign-in">
@@ -61,7 +59,13 @@ const SignIn = () => {
                             Snapcast
                         </span> in no time!
                     </p>
-                    <button onClick={handleSignIn}>
+                   <button
+                    onClick={async () => {
+                    return await authClient.signIn.social({
+                        provider: "google",
+                    });
+                    }}
+                     >
                         <Image src="/assets/icons/google.svg" alt="google"
                         width = {22} height={22} />
                         <span> Sign in with Google </span>

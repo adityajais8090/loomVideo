@@ -1,20 +1,54 @@
-import Header from '@/component/Header'
-import React from 'react'
-import VideoCard from '@/component/VideoCard'
-import { dummyCards } from '@/constants'
+import EmptyState from "@/component/EmptyState";
+import VideoCard from "@/component/VideoCard";
+import { getAllVideos } from "@/lib/actions/video";
+import SharedHeader from "@/component/SharedHeader";
 
-const Page = () => {
+const page = async ({ searchParams }: SearchParams) => {
+  const { query, filter, page } = await searchParams;
+
+  const { videos, pagination } = await getAllVideos(
+    query,
+    filter,
+    Number(page) || 1
+  );
+
   return (
-    <main className = "wrapper page">
-      <Header title = "All Videos" subHeader='Public Library' />
-      <section className='video-grid'>
-        {dummyCards.map((card) => (
-        <VideoCard key={card.id} {...card} />
-      ))}
-      </section>
-      
-      </main >
-  )
-}
+    <main className="wrapper page">
+       <SharedHeader subHeader="Public Library" title="All Videos" />
 
-export default Page
+      {videos?.length > 0 ? (
+        <section className="video-grid">
+          {videos.map(({ video, user }) => (
+            <VideoCard
+              key={video.id}
+              
+              {...video}
+              id={video.videoId}
+              thumbnail={video.thumbnailUrl}
+              userImg={user?.image ?? ""}
+              username={user?.name ?? "Guest"}
+              
+            />
+          ))}
+        </section>
+      ) : (
+        <EmptyState
+          icon="/assets/icons/video.svg"
+          title="No Videos Found"
+          description="Try adjusting your search."
+        />
+      )}
+
+      {/* {pagination?.totalPages > 1 && (
+        <Pagination
+          currentPage={pagination.currentPage}
+          totalPages={pagination.totalPages}
+          queryString={query}
+          filterString={filter}
+        />
+      )} */}
+    </main>
+  );
+};
+
+export default page;
