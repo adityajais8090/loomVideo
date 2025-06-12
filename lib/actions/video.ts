@@ -188,6 +188,14 @@ export const getVideoById = withErrorHandling(async (videoId: string) => {
   return videoRecord;
 });
 
+export const getVideoByDbId = withErrorHandling(async (id: string) => {
+  const [videoRecord] = await buildVideoWithUserQuery().where(
+    eq(videos.id, id) // ✅ Query by DB `id`
+  );
+  return videoRecord;
+});
+
+
 
 export const getAllVideosByUser = withErrorHandling(
   async (
