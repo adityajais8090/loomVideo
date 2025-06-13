@@ -1,12 +1,25 @@
 'use client';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { authClient } from "@/lib/auth-client";
 import Loader from "@/component/Loader";
+import { toast } from "react-toastify";
 
 const SignIn = () => {
-   const [loading, setloading] = useState(false);
+   const [loading, setLoading] = useState(false);
+   const [error, setError] = useState('');
+
+   useEffect(() => {
+        if (loading) {
+            const timeout = setTimeout(() => {
+                setLoading(false);
+                setError("Something went wrong. Please try again later.");
+                toast.error("Login Limit Exceeded. Try after 1 min");
+            }, 20000); 
+            return () => clearTimeout(timeout);
+        }
+    }, [loading]);
     
 
     return (
@@ -62,24 +75,23 @@ const SignIn = () => {
                     </p>
                    <button
                         onClick={async () => {
-                            try {
-                            setloading(true); // start loader
+                            setLoading(true); // start loader
                             await authClient.signIn.social({
                                 provider: "google",
                             });
-                            } catch (err) {
-                            console.error("Google sign-in failed", err);
-                            setloading(false); // stop loader
-                            }
                         }}
                         >
+                   {loading ? (
+                        <Loader />
+                    ) : (
+                        <>
                         <Image src="/assets/icons/google.svg" alt="google" width={22} height={22} />
                         <span>Sign in with Google</span>
+                        </>
+                    )}
+                        
                         </button>
-
-
                 </section>
-
             </aside>
             <div className="overlay" />
         </main>

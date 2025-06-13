@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Karla } from "next/font/google";
 import "./globals.css";
 import { satoshi } from "../fonts/font";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const geistKarla = Karla({
   variable: "--font-geist-karla",
@@ -27,7 +29,9 @@ export default function Layout({
         className={`${geistKarla.variable} ${satoshi.variable} font-karla antialiased`}
       >
         {children}
+        <ToastContainer position="top-right" autoClose={5000} />
       </body>
     </html>
   );
 }
+
