@@ -35,7 +35,7 @@ const SignIn = () => {
                             height={64} className="rounded-full" />
                             <div>
                                 <h2>
-                                    Aditya Jaiswal   
+                                    Snowden  
                                 </h2>
                             </div>
                             <p> Product Developer, Microsoft</p>
