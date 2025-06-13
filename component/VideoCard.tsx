@@ -17,34 +17,41 @@ const VideoCard = ({
     <Link href={`/video/${id}`} className="video-card">
         <Image src={thumbnail} alt="thumbnail" width={290}
         height={270} className="thumbnail" />
-        <article>
-            <div>
-                <figure>
-                    <Image src={userImg || '/assets/images/dummy.jpg'} alt="avatar" width={34}
-                    height={34} className='rounded-full aspect-square' />
-                    <figcaption>
-                        <h3>{username}</h3>
-                        <p>{visibility}</p>
-                    </figcaption>
-                </figure>
-                <aside>
-                     <Image src="/assets/icons/eye.svg" alt="views"
-                     width={16} height={16} />
-                     <span>
-                        {views}
-                     </span>
-                </aside>
+        <article className="hover:shadow-md transition">
+            <div className="flex items-center justify-between mb-2">
+                {/* User Info */}
+                <div className="flex items-center gap-3">
+                <Image
+                    src={userImg || '/assets/images/dummy.jpg'}
+                    alt="avatar"
+                    width={34}
+                    height={34}
+                    className="rounded-full aspect-square object-cover"
+                />
+                <div className="flex flex-col text-sm">
+                    <h3 className="font-semibold text-gray-800">{username}</h3>
+                    <p className="text-gray-500 text-xs">{visibility}</p>
+                </div>
+                </div>
 
-                <h2>
-                {title} -{" "}
-                {createdAt.toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'short',
-                    day: 'numeric',
-                })}
-                </h2>
+                {/* Views */}
+                <div className="flex items-center gap-1 text-sm text-gray-500">
+                <Image src="/assets/icons/eye.svg" alt="views" width={16} height={16} />
+                <span>{views}</span>
+                </div>
             </div>
-        </article>
+
+            {/* Title + Date */}
+            <h2 className="text-sm font-medium text-gray-800 line-clamp-1">
+                {title} -{" "}
+                {createdAt.toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+                })}
+            </h2>
+            </article>
+
         <button onClick={() => {}} className = "copy-btn"> 
             <Image src="/assets/icons/link.svg" alt="copy" width={18}
             height={18} />
